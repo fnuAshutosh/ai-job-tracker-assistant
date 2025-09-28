@@ -1,0 +1,121 @@
+{
+  "Google": {
+    "company_overview": "Google conducts rigorous technical interviews focusing on algorithms, system design, and cultural fit",
+    "interview_process": {
+      "rounds": 5,
+      "structure": [
+        {"round": 1, "type": "Phone Screen", "duration": "45 minutes", "focus": "Technical coding questions"},
+        {"round": 2, "type": "Technical Interview 1", "duration": "45 minutes", "focus": "Data structures and algorithms"},
+        {"round": 3, "type": "Technical Interview 2", "duration": "45 minutes", "focus": "System design basics"},
+        {"round": 4, "type": "Behavioral Interview", "duration": "30 minutes", "focus": "Googleyness and leadership"},
+        {"round": 5, "type": "Team Match", "duration": "30 minutes", "focus": "Team fit and project discussion"}
+      ]
+    },
+    "technical_focus": ["Algorithms", "Data Structures", "System Design", "Coding Best Practices"],
+    "behavioral_themes": ["Googleyness", "Leadership", "Innovation", "Collaboration"],
+    "recent_changes": "Moved to virtual interviews since Q3 2025, increased focus on system design for mid-level roles",
+    "difficulty_rating": 4.2,
+    "success_tips": [
+      "Practice LeetCode medium/hard problems",
+      "Study system design fundamentals", 
+      "Prepare STAR method examples",
+      "Research Google's engineering principles"
+    ],
+    "confidence_score": 0.87
+  },
+  "Microsoft": {
+    "company_overview": "Microsoft emphasizes problem-solving skills, technical depth, and cultural alignment with growth mindset",
+    "interview_process": {
+      "rounds": 4,
+      "structure": [
+        {"round": 1, "type": "Phone Screen", "duration": "60 minutes", "focus": "Technical coding and basics"},
+        {"round": 2, "type": "Technical Deep Dive", "duration": "60 minutes", "focus": "Advanced technical concepts"},
+        {"round": 3, "type": "System Design", "duration": "45 minutes", "focus": "Architecture and scalability"},
+        {"round": 4, "type": "Behavioral + Manager", "duration": "45 minutes", "focus": "Culture fit and growth mindset"}
+      ]
+    },
+    "technical_focus": ["Problem Solving", "Software Architecture", "Cloud Technologies", "Scalability"],
+    "behavioral_themes": ["Growth Mindset", "Collaboration", "Customer Focus", "Diversity & Inclusion"],
+    "recent_changes": "Increased emphasis on Azure cloud knowledge, more collaborative coding exercises",
+    "difficulty_rating": 3.8,
+    "success_tips": [
+      "Demonstrate growth mindset in examples",
+      "Study Azure fundamentals if applying to cloud teams",
+      "Practice collaborative problem solving",
+      "Prepare for behavioral questions about learning from failure"
+    ],
+    "confidence_score": 0.82
+  },
+  "Meta": {
+    "company_overview": "Meta focuses on technical excellence, impact-driven mindset, and ability to work in fast-paced environment",
+    "interview_process": {
+      "rounds": 5,
+      "structure": [
+        {"round": 1, "type": "Recruiter Screen", "duration": "30 minutes", "focus": "Background and interest"},
+        {"round": 2, "type": "Technical Phone Screen", "duration": "45 minutes", "focus": "Coding and problem solving"},
+        {"round": 3, "type": "Coding Interview", "duration": "45 minutes", "focus": "Algorithm implementation"},
+        {"round": 4, "type": "System Design", "duration": "45 minutes", "focus": "Large-scale system architecture"},
+        {"round": 5, "type": "Behavioral", "duration": "30 minutes", "focus": "Meta values and culture"}
+      ]
+    },
+    "technical_focus": ["Algorithms", "System Design", "Performance Optimization", "Large Scale Systems"],
+    "behavioral_themes": ["Move Fast", "Be Bold", "Focus on Impact", "Be Open", "Build Social Value"],
+    "recent_changes": "More emphasis on AI/ML knowledge, focus on efficiency and impact metrics",
+    "difficulty_rating": 4.5,
+    "success_tips": [
+      "Practice system design at scale (billions of users)",
+      "Study Meta's technical blog and engineering practices",
+      "Prepare examples showing high impact and fast execution",
+      "Research Meta's AI initiatives if applying to ML roles"
+    ],
+    "confidence_score": 0.89
+  },
+  "Amazon": {
+    "company_overview": "Amazon emphasizes leadership principles, customer obsession, and technical problem-solving abilities",
+    "interview_process": {
+      "rounds": 6,
+      "structure": [
+        {"round": 1, "type": "Phone Screen", "duration": "45 minutes", "focus": "Technical coding questions"},
+        {"round": 2, "type": "Technical Interview 1", "duration": "60 minutes", "focus": "Data structures and algorithms"},
+        {"round": 3, "type": "Technical Interview 2", "duration": "60 minutes", "focus": "System design and architecture"},
+        {"round": 4, "type": "Leadership Interview 1", "duration": "45 minutes", "focus": "Amazon Leadership Principles"},
+        {"round": 5, "type": "Leadership Interview 2", "duration": "45 minutes", "focus": "More Leadership Principles"},
+        {"round": 6, "type": "Bar Raiser", "duration": "45 minutes", "focus": "Overall assessment and culture fit"}
+      ]
+    },
+    "technical_focus": ["Algorithms", "System Design", "AWS Technologies", "Scalability", "Cost Optimization"],
+    "behavioral_themes": ["Customer Obsession", "Ownership", "Invent and Simplify", "Learn and Be Curious", "Hire and Develop the Best"],
+    "recent_changes": "Increased focus on AWS cloud architecture, more emphasis on cost optimization",
+    "difficulty_rating": 4.0,
+    "success_tips": [
+      "Memorize and prepare examples for all 16 Leadership Principles",
+      "Study AWS services and cloud architecture patterns",
+      "Practice STAR method extensively",
+      "Focus on customer impact in all examples"
+    ],
+    "confidence_score": 0.85
+  },
+  "Netflix": {
+    "company_overview": "Netflix values high performance, context over control, and ability to work independently",
+    "interview_process": {
+      "rounds": 4,
+      "structure": [
+        {"round": 1, "type": "Phone Screen", "duration": "45 minutes", "focus": "Technical and culture screening"},
+        {"round": 2, "type": "Technical Interview", "duration": "90 minutes", "focus": "Hands-on coding and problem solving"},
+        {"round": 3, "type": "System Design", "duration": "60 minutes", "focus": "Streaming and media architecture"},
+        {"round": 4, "type": "Culture Interview", "duration": "45 minutes", "focus": "Netflix culture and values"}
+      ]
+    },
+    "technical_focus": ["Microservices", "Streaming Technologies", "Data Engineering", "Machine Learning", "Performance"],
+    "behavioral_themes": ["High Performance", "Freedom and Responsibility", "Context Not Control", "Keeper Test"],
+    "recent_changes": "More focus on ML and personalization algorithms, emphasis on global scale challenges",
+    "difficulty_rating": 4.3,
+    "success_tips": [
+      "Study Netflix's tech blog and open source projects",
+      "Understand streaming and content delivery challenges",
+      "Prepare for high-performance culture questions",
+      "Research Netflix's ML recommendation systems"
+    ],
+    "confidence_score": 0.78
+  }
+}

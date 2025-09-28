@@ -1,8 +1,9 @@
-google-api-python-client==2.108.0
-google-auth-httplib2==0.1.1
-google-auth-oauthlib==1.1.0
-beautifulsoup4==4.12.2
-streamlit==1.28.1
-pandas==2.1.3
-dateparser==1.1.8
-python-dateutil==2.8.2
+streamlit
+pandas
+python-dateutil
+google-api-python-client
+google-auth-httplib2
+google-auth-oauthlib
+beautifulsoup4
+dateparser
+google-generativeai

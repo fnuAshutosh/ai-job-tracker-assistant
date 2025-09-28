@@ -1,0 +1,126 @@
+{
+  "sample_applications": [
+    {
+      "company": "Google",
+      "role": "Software Engineer",
+      "status": "interview_scheduled",
+      "date_applied": "2025-09-15",
+      "interview_date": "2025-09-30 14:00",
+      "interview_round": "phone_screen",
+      "notes": "Phone screen with hiring manager Sarah Chen",
+      "source": "demo",
+      "board_stage": "interview",
+      "priority": "high"
+    },
+    {
+      "company": "Microsoft",
+      "role": "Product Manager",
+      "status": "applied",
+      "date_applied": "2025-09-20",
+      "notes": "Applied through LinkedIn",
+      "source": "demo",
+      "board_stage": "applied",
+      "priority": "medium"
+    },
+    {
+      "company": "Meta",
+      "role": "Data Scientist",
+      "status": "interviewed",
+      "date_applied": "2025-09-10",
+      "interview_date": "2025-09-25 10:00",
+      "notes": "Completed technical round, awaiting feedback",
+      "source": "demo",
+      "board_stage": "final",
+      "priority": "high"
+    },
+    {
+      "company": "Amazon",
+      "role": "DevOps Engineer",
+      "status": "offer_received",
+      "date_applied": "2025-09-05",
+      "interview_date": "2025-09-20 15:30",
+      "notes": "Received offer! Negotiating salary",
+      "source": "demo",
+      "board_stage": "closed",
+      "priority": "high"
+    },
+    {
+      "company": "Netflix",
+      "role": "ML Engineer",
+      "status": "rejected",
+      "date_applied": "2025-09-12",
+      "interview_date": "2025-09-22 11:00",
+      "notes": "Good technical skills but not a culture fit",
+      "source": "demo",
+      "board_stage": "closed",
+      "priority": "medium"
+    }
+  ],
+  "sample_emails": [
+    {
+      "id": "email_001",
+      "subject": "Interview Invitation - Software Engineer Position",
+      "from": "sarah.chen@google.com",
+      "company": "Google",
+      "body": "Hi there! We'd like to schedule a phone screen for the Software Engineer position you applied for. Are you available next week? Best regards, Sarah Chen, Technical Recruiter",
+      "classification": {
+        "category": "job_interview",
+        "confidence": 0.96,
+        "reasoning": "Contains interview scheduling language and recruiter contact"
+      }
+    },
+    {
+      "id": "email_002", 
+      "subject": "Application Received - Product Manager Role",
+      "from": "careers@microsoft.com",
+      "company": "Microsoft",
+      "body": "Thank you for your application to the Product Manager position at Microsoft. We have received your application and will review it shortly.",
+      "classification": {
+        "category": "application_confirmation",
+        "confidence": 0.94,
+        "reasoning": "Standard application confirmation email"
+      }
+    },
+    {
+      "id": "email_003",
+      "subject": "Congratulations! Job Offer - DevOps Engineer",
+      "from": "hiring@amazon.com", 
+      "company": "Amazon",
+      "body": "Congratulations! We're pleased to extend an offer for the DevOps Engineer position. Please review the attached offer letter and let us know if you have any questions.",
+      "classification": {
+        "category": "job_offer",
+        "confidence": 0.98,
+        "reasoning": "Clear job offer language with congratulations"
+      }
+    }
+  ],
+  "demo_scenarios": {
+    "new_graduate": {
+      "name": "New Graduate Job Hunt",
+      "description": "Experience job hunting as a recent CS graduate",
+      "applications": [
+        {"company": "Google", "role": "Software Engineer Intern", "status": "applied"},
+        {"company": "Microsoft", "role": "Graduate Software Engineer", "status": "phone_screen"},
+        {"company": "Meta", "role": "Junior Developer", "status": "rejected"}
+      ]
+    },
+    "career_changer": {
+      "name": "Career Change to Tech",
+      "description": "Transitioning from another field into technology",
+      "applications": [
+        {"company": "Amazon", "role": "Product Manager", "status": "interview"},
+        {"company": "Netflix", "role": "Data Analyst", "status": "applied"},
+        {"company": "Uber", "role": "Business Intelligence", "status": "offer"}
+      ]
+    },
+    "senior_engineer": {
+      "name": "Senior Engineer Job Search",
+      "description": "Experienced engineer looking for next opportunity",
+      "applications": [
+        {"company": "Apple", "role": "Senior iOS Engineer", "status": "final_round"},
+        {"company": "Tesla", "role": "Staff Software Engineer", "status": "interview"},
+        {"company": "OpenAI", "role": "ML Engineer", "status": "applied"}
+      ]
+    }
+  }
+}

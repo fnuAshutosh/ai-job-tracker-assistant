@@ -25,6 +25,9 @@ from db_utils import (
 )
 from init_demo_database import check_and_initialize_database
 
+# Import demo controller
+from demo_controller import get_demo_controller
+
 # Kanban board functions - defined early to avoid NameError
 def main_kanban_view():
     """Kanban board view for visual pipeline management"""
@@ -246,27 +249,43 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Initialize database on app start with demo data if needed
-if 'db_initialized' not in st.session_state:
-    # Check and initialize database with demo data
-    demo_created = check_and_initialize_database()
-    init_db()  # Ensure all tables exist
-    st.session_state.db_initialized = True
-    
-    if demo_created:
-        st.success("🎭 Welcome! Demo database created with sample applications to explore the features.")
+# Initialize demo controller
+demo_controller = get_demo_controller()
 
-# Main title
-st.title("💼 Job Application Tracker")
+# Render demo banner
+demo_controller.render_demo_banner()
 
-# Navigation selector in sidebar
-view_mode = st.sidebar.radio("� View Mode", ["List View", "Kanban Board"], index=0)
-
-if view_mode == "Kanban Board":
-    main_kanban_view()
+# Check for guided walkthrough first
+if demo_controller.render_walkthrough():
+    # If in walkthrough mode, show only walkthrough content
+    demo_controller.render_demo_controls()
 else:
-    # Continue with original list view
-    st.markdown("---")
+    # Normal app flow
+    
+    # Initialize database on app start with demo data if needed
+    if 'db_initialized' not in st.session_state:
+        # Check and initialize database with demo data
+        demo_created = check_and_initialize_database()
+        init_db()  # Ensure all tables exist
+        st.session_state.db_initialized = True
+        
+        if demo_created:
+            st.success("🎭 Welcome! Demo database created with sample applications to explore the features.")
+
+    # Main title
+    st.title("💼 Job Application Tracker")
+
+    # Navigation selector in sidebar
+    view_mode = st.sidebar.radio("� View Mode", ["List View", "Kanban Board"], index=0)
+
+    # Render demo controls in sidebar
+    demo_controller.render_demo_controls()
+
+    if view_mode == "Kanban Board":
+        main_kanban_view()
+    else:
+        # Continue with original list view
+        st.markdown("---")
 
 # Sidebar navigation
 with st.sidebar:
@@ -493,8 +512,11 @@ with col1:
                     with col_a:
                         st.write(f"**{interview['company']}** - {interview['role']}")
                     with col_b:
-                        interview_dt = pd.to_datetime(interview['interview_date'])
-                        st.write(f"📅 {interview_dt.strftime('%B %d, %Y at %I:%M %p')}")
+                        interview_dt = pd.to_datetime(interview['interview_date'], format='mixed', errors='coerce')
+                        if pd.notna(interview_dt):
+                            st.write(f"📅 {interview_dt.strftime('%B %d, %Y at %I:%M %p')}")
+                        else:
+                            st.write("📅 Invalid date")
                     with col_c:
                         st.write(f"🎯 {interview.get('interview_round', 'Unknown')}")
                     
@@ -542,12 +564,16 @@ with col1:
                     with col_info:
                         # Application details
                         if app.get('date_applied'):
-                            date_applied = pd.to_datetime(app['date_applied'])
-                            st.write(f"📅 **Applied:** {date_applied.strftime('%B %d, %Y')}")
+                            date_applied = pd.to_datetime(app['date_applied'], errors='coerce')
+                            if pd.notna(date_applied):
+                                st.write(f"📅 **Applied:** {date_applied.strftime('%B %d, %Y')}")
                         
                         if app.get('interview_date'):
-                            interview_dt = pd.to_datetime(app['interview_date'])
-                            st.write(f"🎯 **Interview:** {interview_dt.strftime('%B %d, %Y at %I:%M %p')}")
+                            interview_dt = pd.to_datetime(app['interview_date'], format='mixed', errors='coerce')
+                            if pd.notna(interview_dt):
+                                st.write(f"🎯 **Interview:** {interview_dt.strftime('%B %d, %Y at %I:%M %p')}")
+                            else:
+                                st.write("🎯 **Interview:** Invalid date")
                             
                             if app.get('interview_round'):
                                 st.write(f"**Round:** {app['interview_round'].replace('_', ' ').title()}")

@@ -45,21 +45,21 @@ class GeminiEmailClassifier:
         self.model = None
         
         if not self.api_key:
-            print("⚠️ Warning: No Gemini API key found. Set GEMINI_API_KEY environment variable or pass api_key parameter")
+            print("Warning: No Gemini API key found. Set GEMINI_API_KEY environment variable or pass api_key parameter")
             print("Get your API key from: https://makersuite.google.com/app/apikey")
             return
             
         if not GEMINI_AVAILABLE:
-            print("❌ Error: google-generativeai package not installed")
+            print("Error: google-generativeai package not installed")
             return
             
         try:
             genai.configure(api_key=self.api_key)
             # Use the current stable model
             self.model = genai.GenerativeModel('gemini-2.5-flash')
-            print("✅ Gemini AI classifier initialized successfully")
+            print("Gemini AI classifier initialized successfully")
         except Exception as e:
-            print(f"❌ Error initializing Gemini: {e}")
+            print(f"Error initializing Gemini: {e}")
             self.model = None
     
     def classify_email(self, email_data: Dict[str, Any]) -> EmailClassification:
@@ -90,7 +90,7 @@ class GeminiEmailClassifier:
             return self._parse_ai_response(response.text)
             
         except Exception as e:
-            print(f"⚠️ AI classification failed: {e}")
+            print(f"AI classification failed: {e}")
             print("🔄 Falling back to rule-based classification")
             return self._fallback_classification(email_data)
     
@@ -176,11 +176,11 @@ Respond ONLY with valid JSON, no other text.
             )
             
         except json.JSONDecodeError as e:
-            print(f"⚠️ Failed to parse AI response as JSON: {e}")
+            print(f"Failed to parse AI response as JSON: {e}")
             print(f"Response was: {response_text[:200]}...")
             return self._create_fallback_classification("AI parsing error")
         except Exception as e:
-            print(f"⚠️ Error parsing AI response: {e}")
+            print(f"Error parsing AI response: {e}")
             return self._create_fallback_classification("AI response error")
     
     def _fallback_classification(self, email_data: Dict[str, Any]) -> EmailClassification:
@@ -254,11 +254,11 @@ def setup_gemini_api_key():
         env_file = '.env'
         with open(env_file, 'w') as f:
             f.write(f"GEMINI_API_KEY={api_key}\n")
-        print(f"✅ API key saved to {env_file}")
+        print(f"API key saved to {env_file}")
         os.environ['GEMINI_API_KEY'] = api_key
         return api_key
     else:
-        print("⚠️ Skipping API key setup. Will use rule-based classification.")
+        print("Skipping API key setup. Will use rule-based classification.")
         return None
 
 

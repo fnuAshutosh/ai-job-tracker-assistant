@@ -209,7 +209,7 @@ def list_applications(limit: Optional[int] = None) -> pd.DataFrame:
         # Convert date strings back to datetime objects for display
         if not df.empty:
             df['date_applied'] = pd.to_datetime(df['date_applied'], errors='coerce')
-            df['interview_date'] = pd.to_datetime(df['interview_date'], errors='coerce')
+            df['interview_date'] = pd.to_datetime(df['interview_date'], format='mixed', errors='coerce')
             df['created_at'] = pd.to_datetime(df['created_at'], errors='coerce')
             df['updated_at'] = pd.to_datetime(df['updated_at'], errors='coerce')
         
@@ -258,7 +258,8 @@ def get_upcoming_interviews(days_ahead: int = 7) -> pd.DataFrame:
         df = pd.read_sql_query(query, conn, params=(current_date, cutoff_date))
         
         if not df.empty:
-            df['interview_date'] = pd.to_datetime(df['interview_date'])
+            # Handle mixed datetime formats in the database
+            df['interview_date'] = pd.to_datetime(df['interview_date'], format='mixed', errors='coerce')
         
         return df
         
@@ -438,7 +439,7 @@ def search_applications(query: str, field: str = 'all') -> pd.DataFrame:
         
         if not df.empty:
             df['date_applied'] = pd.to_datetime(df['date_applied'], errors='coerce')
-            df['interview_date'] = pd.to_datetime(df['interview_date'], errors='coerce')
+            df['interview_date'] = pd.to_datetime(df['interview_date'], format='mixed', errors='coerce')
         
         return df
         
