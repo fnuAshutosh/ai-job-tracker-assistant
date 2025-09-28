@@ -1,0 +1,65 @@
+name: Deploy to Multiple Platforms
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest
+    
+    - name: Run tests
+      run: |
+        python -m py_compile *.py
+        python -c "import app, db_utils, demo_controller"
+  
+  deploy-streamlit:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Trigger Streamlit Cloud Deployment
+      run: |
+        echo "✅ Streamlit Cloud will auto-deploy from main branch"
+        echo "🔗 Check deployment at: https://share.streamlit.io/"
+    
+  deploy-docker:
+    needs: test
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Build Docker Image
+      run: |
+        echo "🐳 Could build Docker image for other deployments"
+        # docker build -t job-tracker:${{ github.ref_name }} .
+    
+  notify:
+    needs: [test, deploy-streamlit]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+    - name: Deployment Status
+      run: |
+        echo "📊 Deployment Status:"
+        echo "✅ Tests: ${{ needs.test.result }}"
+        echo "🚀 Streamlit: Auto-deploying"

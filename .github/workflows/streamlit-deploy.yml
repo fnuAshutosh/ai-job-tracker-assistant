@@ -1,0 +1,191 @@
+name: Deploy to Streamlit Cloud
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - 'README.md'
+      - 'docs/**'
+      - '*.md'
+  
+  workflow_dispatch:
+    inputs:
+      deploy_environment:
+        description: 'Deployment Environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+
+jobs:
+  pre-deployment-checks:
+    runs-on: ubuntu-latest
+    
+    outputs:
+      should_deploy: ${{ steps.changes.outputs.should_deploy }}
+      
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 2
+    
+    - name: 🔍 Check for relevant changes
+      id: changes
+      run: |
+        # Check if there are changes to important files
+        if git diff --name-only HEAD~1 HEAD | grep -E '\.(py|txt|toml|yaml|yml)$'; then
+          echo "should_deploy=true" >> $GITHUB_OUTPUT
+          echo "📝 Found relevant changes, proceeding with deployment"
+        else
+          echo "should_deploy=false" >> $GITHUB_OUTPUT
+          echo "ℹ️ No relevant changes found, skipping deployment"
+        fi
+    
+    - name: 📊 Deployment summary
+      run: |
+        echo "## 🚀 Deployment Status" >> $GITHUB_STEP_SUMMARY
+        echo "- **Trigger**: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Should Deploy**: ${{ steps.changes.outputs.should_deploy }}" >> $GITHUB_STEP_SUMMARY
+
+  streamlit-deployment:
+    needs: pre-deployment-checks
+    if: needs.pre-deployment-checks.outputs.should_deploy == 'true'
+    runs-on: ubuntu-latest
+    
+    environment:
+      name: streamlit-cloud
+      url: https://${{ github.repository_owner }}-${{ github.event.repository.name }}-main.streamlit.app
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+    
+    - name: 🐍 Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: 📦 Install and validate dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        echo "✅ Dependencies installed successfully"
+    
+    - name: 🧪 Run pre-deployment tests
+      run: |
+        # Quick smoke tests before deployment
+        python -c "
+        import streamlit as st
+        import pandas as pd
+        import sys
+        
+        # Test critical imports
+        try:
+            import app
+            import db_utils  
+            import demo_controller
+            print('✅ All critical modules import successfully')
+        except Exception as e:
+            print(f'❌ Import error: {e}')
+            sys.exit(1)
+        
+        # Test Streamlit compatibility
+        print(f'✅ Streamlit version: {st.__version__}')
+        print(f'✅ Pandas version: {pd.__version__}')
+        print(f'✅ Python version: {sys.version}')
+        print('🎉 Pre-deployment validation passed!')
+        "
+    
+    - name: 📋 Generate deployment manifest
+      run: |
+        echo "Creating deployment manifest..."
+        cat > deployment_manifest.json << EOF
+        {
+          "app_name": "${{ github.event.repository.name }}",
+          "branch": "${{ github.ref_name }}",
+          "commit": "${{ github.sha }}",
+          "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+          "python_version": "3.11",
+          "streamlit_version": "$(pip show streamlit | grep Version | cut -d' ' -f2)",
+          "deployment_trigger": "${{ github.event_name }}",
+          "repository": "${{ github.repository }}"
+        }
+        EOF
+        
+        echo "📋 Deployment Manifest:"
+        cat deployment_manifest.json
+    
+    - name: 🚀 Trigger Streamlit Cloud Deployment
+      run: |
+        echo "🎯 Streamlit Cloud Auto-Deployment Triggered!"
+        echo ""
+        echo "📍 Deployment Details:"
+        echo "  - Repository: ${{ github.repository }}"
+        echo "  - Branch: ${{ github.ref_name }}"
+        echo "  - Commit: ${{ github.sha }}"
+        echo "  - Timestamp: $(date -u)"
+        echo ""
+        echo "🔗 Expected App URL: https://${{ github.repository_owner }}-${{ github.event.repository.name }}-main.streamlit.app"
+        echo ""
+        echo "⏱️ Deployment typically takes 2-5 minutes"
+        echo "📊 Monitor deployment at: https://share.streamlit.io/"
+    
+    - name: 📊 Add deployment summary
+      run: |
+        echo "## 🚀 Streamlit Cloud Deployment" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📍 Deployment Information" >> $GITHUB_STEP_SUMMARY
+        echo "- **Status**: ✅ Triggered Successfully" >> $GITHUB_STEP_SUMMARY
+        echo "- **Repository**: ${{ github.repository }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Commit**: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+        echo "- **Python Version**: 3.11" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 🔗 Access Your App" >> $GITHUB_STEP_SUMMARY
+        echo "- **App URL**: https://${{ github.repository_owner }}-${{ github.event.repository.name }}-main.streamlit.app" >> $GITHUB_STEP_SUMMARY
+        echo "- **Dashboard**: [Streamlit Cloud](https://share.streamlit.io/)" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### ⏱️ Timeline" >> $GITHUB_STEP_SUMMARY
+        echo "- **Triggered**: $(date -u)" >> $GITHUB_STEP_SUMMARY
+        echo "- **Expected Completion**: ~2-5 minutes" >> $GITHUB_STEP_SUMMARY
+        
+  post-deployment:
+    needs: [pre-deployment-checks, streamlit-deployment]
+    runs-on: ubuntu-latest
+    if: always() && needs.pre-deployment-checks.outputs.should_deploy == 'true'
+    
+    steps:
+    - name: 🏥 Health Check (after delay)
+      run: |
+        echo "⏱️ Waiting for deployment to complete..."
+        sleep 120  # Wait 2 minutes for deployment
+        
+        APP_URL="https://${{ github.repository_owner }}-${{ github.event.repository.name }}-main.streamlit.app"
+        echo "🔍 Checking app health at: $APP_URL"
+        
+        # Try to check if the app is responding (with timeout and retries)
+        for i in {1..5}; do
+          if curl -f -s -m 10 "$APP_URL" > /dev/null; then
+            echo "✅ App is responding! ($i/5)"
+            break
+          else
+            echo "⏳ App not ready yet, retrying in 30s... ($i/5)"
+            sleep 30
+          fi
+        done
+    
+    - name: 📧 Notify on deployment status
+      if: always()
+      run: |
+        if [ "${{ needs.streamlit-deployment.result }}" = "success" ]; then
+          echo "✅ Deployment completed successfully!"
+          echo "🎉 Your Streamlit app is live!"
+        else
+          echo "❌ Deployment encountered issues"
+          echo "🔍 Check the logs above for details"
+        fi

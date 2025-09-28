@@ -1,0 +1,73 @@
+name: Development Environment
+
+on:
+  pull_request:
+    branches: [ main ]
+    types: [opened, synchronize, reopened]
+
+jobs:
+  setup-dev-environment:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+    
+    - name: 🐍 Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: 📦 Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install streamlit-dev-tools
+    
+    - name: 🧪 Run development tests
+      run: |
+        echo "🔍 Running development environment tests..."
+        
+        # Test app structure
+        python -c "
+        import os
+        required_files = ['app.py', 'requirements.txt', 'db_utils.py', 'demo_controller.py']
+        missing = [f for f in required_files if not os.path.exists(f)]
+        if missing:
+            print(f'❌ Missing files: {missing}')
+            exit(1)
+        print('✅ All required files present')
+        "
+        
+        # Test imports in development mode
+        python -c "
+        import sys
+        try:
+            import streamlit as st
+            print('✅ Streamlit development mode ready')
+            
+            # Test if we can import our modules
+            import db_utils
+            import demo_controller
+            import ai_email_classifier
+            print('✅ All application modules importable')
+            
+        except Exception as e:
+            print(f'❌ Development setup error: {e}')
+            sys.exit(1)
+        "
+    
+    - name: 📊 Generate PR preview info
+      run: |
+        echo "## 👨‍💻 Development Environment Ready" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 🚀 To test locally:" >> $GITHUB_STEP_SUMMARY
+        echo '```bash' >> $GITHUB_STEP_SUMMARY
+        echo "git checkout ${{ github.head_ref }}" >> $GITHUB_STEP_SUMMARY
+        echo "pip install -r requirements.txt" >> $GITHUB_STEP_SUMMARY
+        echo "streamlit run app.py" >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📋 Changes in this PR:" >> $GITHUB_STEP_SUMMARY
+        echo "- Branch: \`${{ github.head_ref }}\`" >> $GITHUB_STEP_SUMMARY
+        echo "- Base: \`${{ github.base_ref }}\`" >> $GITHUB_STEP_SUMMARY
