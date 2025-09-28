@@ -11,6 +11,11 @@ from privacy_components import (
     show_session_status,
     show_privacy_footer
 )
+from user_api_keys import (
+    show_api_key_setup,
+    initialize_key_system,
+    get_user_gemini_key
+)
 
 def show_landing_page():
     """
@@ -69,15 +74,39 @@ def show_landing_page():
 
 def show_gmail_onboarding():
     """
-    Show Gmail connection onboarding flow
+    Show Gmail connection onboarding flow with API key setup
     """
     st.markdown("""
     ## 📧 Connect Your Gmail Account
     
+    To use real Gmail integration, you need to provide your own API keys. 
+    This ensures maximum privacy and gives you full control over your data and costs.
+    """)
+    
+    # API Key Setup
+    has_gemini_key = show_api_key_setup()
+    
+    if not has_gemini_key:
+        st.warning("""
+        ⚠️ **Gemini API key required** to proceed with Gmail integration. 
+        The AI analysis needs your personal API key for privacy and cost control.
+        """)
+        
+        if st.button("⬅️ Try Demo Mode Instead"):
+            st.session_state.user_choice = "demo"
+            st.session_state.demo_mode = True
+            st.rerun()
+        
+        return False
+    
+    # If API key is configured, proceed with Gmail setup
+    st.success("🔑 **API Key Configured!** You can now connect Gmail.")
+    
+    st.markdown("""
     ### What Happens Next:
     1. **OAuth Login**: Secure Google authentication popup
     2. **Permission Grant**: You'll grant read-only access to your Gmail
-    3. **Email Analysis**: We'll scan for job-related emails in memory
+    3. **Email Analysis**: We'll scan for job-related emails using YOUR Gemini API
     4. **Results Display**: See your organized job applications and interviews
     5. **Automatic Cleanup**: All data destroyed when you close the tab
     """)
@@ -87,6 +116,12 @@ def show_gmail_onboarding():
     🔒 **Security Promise**: We use Google's official OAuth 2.0 system. 
     Your Gmail password is never shared with us. You can revoke access anytime 
     from your Google Account settings.
+    """)
+    
+    # API Cost transparency
+    st.info("""
+    💰 **Cost Transparency**: Your Gemini API calls are billed to your Google account. 
+    Typical cost: ~$0.001 per email analyzed (very affordable with generous free tier).
     """)
     
     # Warning about data destruction
@@ -154,3 +189,6 @@ def initialize_landing_state():
         st.session_state.gmail_authenticated = False
     if 'demo_mode' not in st.session_state:
         st.session_state.demo_mode = False
+    
+    # Initialize API key system
+    initialize_key_system()

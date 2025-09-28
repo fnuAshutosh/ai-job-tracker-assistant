@@ -40,6 +40,12 @@ from privacy_components import (
     show_demo_vs_real_banner,
     show_privacy_footer
 )
+from user_api_keys import (
+    show_api_usage_info,
+    show_key_management_controls,
+    create_configured_gemini_classifier,
+    get_user_gemini_key
+)
 
 # Kanban board functions - defined early to avoid NameError
 def main_kanban_view():
@@ -278,14 +284,15 @@ if st.session_state.show_landing:
 # Handle user choice flow
 if st.session_state.user_choice == "gmail" and not st.session_state.gmail_authenticated:
     if show_gmail_onboarding():
-        # User clicked to connect Gmail - would integrate OAuth here
-        st.info("🚧 Gmail OAuth integration coming next! For now, try Demo Mode.")
-        if st.button("⬅️ Back to Demo Mode"):
-            st.session_state.user_choice = "demo"
-            st.session_state.demo_mode = True
+        # User clicked to connect Gmail - show OAuth flow
+        from session_gmail import show_gmail_oauth_flow
+        
+        st.markdown("---")
+        
+        if show_gmail_oauth_flow():
+            # User completed OAuth and wants to fetch emails
+            st.session_state.user_choice = "gmail_ready" 
             st.rerun()
-        show_privacy_footer()
-        st.stop()
     else:
         show_privacy_footer()
         st.stop()
@@ -300,6 +307,10 @@ if st.session_state.user_choice == "demo" and not st.session_state.demo_mode:
 
 # Show session status in sidebar
 show_session_status()
+
+# Show API usage info and controls
+show_api_usage_info()
+show_key_management_controls()
 
 # Show data mode banner
 show_demo_vs_real_banner()
@@ -350,16 +361,32 @@ with st.sidebar:
     st.subheader("📧 Gmail Integration")
     
     if st.button("🔄 Fetch Interview Emails", help="Fetch new interview emails from Gmail"):
+        # Check if user has provided API key
+        if not get_user_gemini_key():
+            st.error("🔑 **Gemini API Key Required**: Please configure your API key first to use Gmail integration.")
+            st.info("💡 Configure your API key in the main setup section above.")
+            st.stop()
+            
+        # Check if Gmail is connected
+        if not st.session_state.get('gmail_authenticated', False):
+            st.error("📧 **Gmail Not Connected**: Please connect your Gmail account first.")
+            st.info("💡 Use the Gmail authentication flow above to connect your account.")
+            st.stop()
+            
         with st.spinner("Fetching emails from Gmail..."):
             try:
                 # Get Gmail service
                 service = get_gmail_service()
                 
-                # Initialize AI classifier
-                ai_classifier = GeminiEmailClassifier()
+                # Initialize AI classifier with user's API key
+                ai_classifier = create_configured_gemini_classifier()
+                if not ai_classifier:
+                    st.error("❌ Failed to initialize Gemini classifier. Check your API key.")
+                    st.stop()
                 
-                # Fetch interview emails
-                emails = fetch_interview_emails(service, max_results=50)
+                # Fetch interview emails using session-based Gmail
+                from session_gmail import fetch_session_emails
+                emails = fetch_session_emails(max_results=50)
                 
                 if emails:
                     st.success(f"Found {len(emails)} interview emails!")
