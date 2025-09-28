@@ -28,6 +28,19 @@ from init_demo_database import check_and_initialize_database
 # Import demo controller
 from demo_controller import get_demo_controller
 
+# Import privacy and landing page components
+from landing_page import (
+    initialize_landing_state,
+    show_landing_page,
+    show_gmail_onboarding,
+    show_demo_onboarding
+)
+from privacy_components import (
+    show_session_status,
+    show_demo_vs_real_banner,
+    show_privacy_footer
+)
+
 # Kanban board functions - defined early to avoid NameError
 def main_kanban_view():
     """Kanban board view for visual pipeline management"""
@@ -248,6 +261,48 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
+# Initialize landing page session state
+initialize_landing_state()
+
+# Handle landing page flow
+if st.session_state.show_landing:
+    if show_landing_page():
+        # User has given consent, proceed with app
+        pass
+    else:
+        # Still on landing page or consent not given
+        show_privacy_footer()
+        st.stop()
+
+# Handle user choice flow
+if st.session_state.user_choice == "gmail" and not st.session_state.gmail_authenticated:
+    if show_gmail_onboarding():
+        # User clicked to connect Gmail - would integrate OAuth here
+        st.info("🚧 Gmail OAuth integration coming next! For now, try Demo Mode.")
+        if st.button("⬅️ Back to Demo Mode"):
+            st.session_state.user_choice = "demo"
+            st.session_state.demo_mode = True
+            st.rerun()
+        show_privacy_footer()
+        st.stop()
+    else:
+        show_privacy_footer()
+        st.stop()
+
+if st.session_state.user_choice == "demo" and not st.session_state.demo_mode:
+    if show_demo_onboarding():
+        st.session_state.demo_mode = True
+        st.rerun()
+    else:
+        show_privacy_footer()
+        st.stop()
+
+# Show session status in sidebar
+show_session_status()
+
+# Show data mode banner
+show_demo_vs_real_banner()
 
 # Initialize demo controller
 demo_controller = get_demo_controller()
@@ -647,6 +702,9 @@ if st.sidebar.button("📖 Setup Instructions"):
            
         📚 See README.md for detailed instructions
         """)
+
+# Show privacy footer
+show_privacy_footer()
 
 
 if __name__ == "__main__":
