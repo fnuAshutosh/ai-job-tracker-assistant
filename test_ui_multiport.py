@@ -1,8 +1,5 @@
 """
-Streamldef find_running_app():
-    """Find which port the Streamlit app is running on"""
-    print("🔍 Searching for running Streamlit app...")
-    ports_to_test = [8503, 8501, 8502, 8504, 8505]I Testing with Multiple Port Detection
+Streamlit UI Testing with Multiple Port Detection
 Tests UI functionality with automatic port discovery.
 """
 
