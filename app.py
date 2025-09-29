@@ -271,8 +271,16 @@ st.set_page_config(
 # Initialize landing page session state
 initialize_landing_state()
 
+# Add a test bypass for development
+test_mode = st.sidebar.checkbox("🧪 Test Mode (Bypass Landing)", value=False, help="Skip landing page for testing")
+
+if test_mode:
+    st.session_state.show_landing = False
+    st.session_state.user_choice = "demo"
+    st.session_state.demo_mode = True
+
 # Handle landing page flow
-if st.session_state.show_landing:
+if st.session_state.show_landing and not test_mode:
     if show_landing_page():
         # User has given consent, proceed with app
         pass
@@ -311,6 +319,29 @@ show_session_status()
 # Show API usage info and controls
 show_api_usage_info()
 show_key_management_controls()
+
+# If in test mode, show API key setup in sidebar
+if test_mode:
+    st.sidebar.markdown("---")
+    st.sidebar.markdown("### 🔑 Test API Key Setup")
+    
+    # Direct API key input in sidebar
+    gemini_key = st.sidebar.text_input(
+        "Gemini API Key",
+        type="password",
+        placeholder="AIzaSyA...",
+        help="Test your Gemini API key",
+        key="test_gemini_key"
+    )
+    
+    if gemini_key:
+        st.session_state.user_gemini_key = gemini_key
+        st.sidebar.success("✅ API key set!")
+    
+    if st.sidebar.button("Clear Test Key"):
+        if 'user_gemini_key' in st.session_state:
+            del st.session_state.user_gemini_key
+        st.rerun()
 
 # Show data mode banner
 show_demo_vs_real_banner()
