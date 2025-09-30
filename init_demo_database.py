@@ -185,9 +185,9 @@ def initialize_demo_database():
     conn.commit()
     conn.close()
     
-    print(f"✅ Created {len(demo_apps)} demo applications")
-    print("✅ Demo database initialization complete!")
-    print("\n🎯 This demo data includes:")
+    print(f"[OK] Created {len(demo_apps)} demo applications")
+    print("[OK] Demo database initialization complete!")
+    print("\n[INFO] This demo data includes:")
     print("   • Realistic company names (all fictional)")
     print("   • Various job roles and application statuses")
     print("   • Sample interview scheduling and notes")
@@ -212,16 +212,16 @@ def check_and_initialize_database():
             conn.close()
             
             if count == 0:
-                print("📭 Database exists but is empty. Adding demo data...")
+                print("[INFO] Database exists but is empty. Adding demo data...")
                 initialize_demo_database()
                 return True
             else:
-                print(f"✅ Database exists with {count} applications")
+                print(f"[OK] Database exists with {count} applications")
                 return False
         except sqlite3.OperationalError:
             # Table doesn't exist, reinitialize
             conn.close()
-            print("🔧 Database schema missing. Reinitializing...")
+            print("[INIT] Database schema missing. Reinitializing...")
             initialize_demo_database()
             return True
 

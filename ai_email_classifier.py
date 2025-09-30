@@ -57,9 +57,9 @@ class GeminiEmailClassifier:
             genai.configure(api_key=self.api_key)
             # Use the current stable model
             self.model = genai.GenerativeModel('gemini-2.5-flash')
-            print("✅ Gemini AI classifier initialized successfully")
+            print("[OK] Gemini AI classifier initialized successfully")
         except Exception as e:
-            print(f"❌ Error initializing Gemini: {e}")
+            print(f"[ERROR] Error initializing Gemini: {e}")
             self.model = None
     
     def classify_email(self, email_data: Dict[str, Any]) -> EmailClassification:

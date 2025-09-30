@@ -367,7 +367,7 @@ with st.sidebar:
                     st.info("No new interview emails found")
                     
             except FileNotFoundError:
-                st.error("❌ **Setup Required**: Please add your `credentials.json` file to the project directory. See README for setup instructions.")
+                st.error("[ERROR] **Setup Required**: Please add your `credentials.json` file to the project directory. See README for setup instructions.")
             except Exception as e:
                 st.error(f"Error fetching emails: {e}")
                 with st.expander("Error Details"):
@@ -485,7 +485,7 @@ with col1:
         upcoming_interviews = get_upcoming_interviews(days_ahead=7)
         
         if not upcoming_interviews.empty:
-            st.warning("🚨 **Upcoming Interviews (Next 7 Days)**")
+            st.warning("[ALERT] **Upcoming Interviews (Next 7 Days)**")
             
             for _, interview in upcoming_interviews.iterrows():
                 with st.container():
@@ -494,7 +494,10 @@ with col1:
                         st.write(f"**{interview['company']}** - {interview['role']}")
                     with col_b:
                         interview_dt = pd.to_datetime(interview['interview_date'])
-                        st.write(f"📅 {interview_dt.strftime('%B %d, %Y at %I:%M %p')}")
+                        if pd.notna(interview_dt):  # Check for NaT before strftime
+                            st.write(f"[Date] {interview_dt.strftime('%B %d, %Y at %I:%M %p')}")
+                        else:
+                            st.write("[Date] TBD")
                     with col_c:
                         st.write(f"🎯 {interview.get('interview_round', 'Unknown')}")
                     
@@ -543,11 +546,17 @@ with col1:
                         # Application details
                         if app.get('date_applied'):
                             date_applied = pd.to_datetime(app['date_applied'])
-                            st.write(f"📅 **Applied:** {date_applied.strftime('%B %d, %Y')}")
+                            if pd.notna(date_applied):  # Check for NaT before strftime
+                                st.write(f"[Date] **Applied:** {date_applied.strftime('%B %d, %Y')}")
+                            else:
+                                st.write("[Date] **Applied:** TBD")
                         
                         if app.get('interview_date'):
                             interview_dt = pd.to_datetime(app['interview_date'])
-                            st.write(f"🎯 **Interview:** {interview_dt.strftime('%B %d, %Y at %I:%M %p')}")
+                            if pd.notna(interview_dt):  # Check for NaT before strftime
+                                st.write(f"[Date] **Interview:** {interview_dt.strftime('%B %d, %Y at %I:%M %p')}")
+                            else:
+                                st.write("[Date] **Interview:** TBD")
                             
                             if app.get('interview_round'):
                                 st.write(f"**Round:** {app['interview_round'].replace('_', ' ').title()}")
