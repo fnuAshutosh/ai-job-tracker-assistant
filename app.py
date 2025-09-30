@@ -276,16 +276,18 @@ with st.sidebar:
     st.subheader("📧 Gmail Integration")
     
     if st.button("🔄 Fetch Interview Emails", help="Fetch new interview emails from Gmail"):
-        with st.spinner("Fetching emails from Gmail..."):
-            try:
-                # Get Gmail service
-                service = get_gmail_service()
-                
+        try:
+            # Use safe Gmail service that won't hang Streamlit
+            from gmail_streamlit_safe import get_gmail_service_streamlit_safe, safe_fetch_interview_emails
+            
+            service = get_gmail_service_streamlit_safe()
+            
+            if service:
                 # Initialize AI classifier
                 ai_classifier = GeminiEmailClassifier()
                 
-                # Fetch interview emails
-                emails = fetch_interview_emails(service, max_results=50)
+                # Fetch interview emails using safe method
+                emails = safe_fetch_interview_emails(service, max_results=50)
                 
                 if emails:
                     st.success(f"Found {len(emails)} interview emails!")
@@ -365,13 +367,16 @@ with st.sidebar:
                     
                 else:
                     st.info("No new interview emails found")
+            else:
+                # Service not available - instructions will be shown by get_gmail_service_streamlit_safe()
+                pass
                     
-            except FileNotFoundError:
-                st.error("[ERROR] **Setup Required**: Please add your `credentials.json` file to the project directory. See README for setup instructions.")
-            except Exception as e:
-                st.error(f"Error fetching emails: {e}")
-                with st.expander("Error Details"):
-                    st.code(traceback.format_exc())
+        except FileNotFoundError:
+            st.error("[ERROR] **Setup Required**: Please add your `credentials.json` file to the project directory. See README for setup instructions.")
+        except Exception as e:
+            st.error(f"Error fetching emails: {e}")
+            with st.expander("Error Details"):
+                st.code(traceback.format_exc())
 
     st.markdown("---")
     
