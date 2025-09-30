@@ -1,6 +1,10 @@
 """
 User API Key Management System
-Handles user-provided API keys for Gmail and Gemini integration
+Handles user-pro      if not gemini_key:
+        st.info("🔑 Please enter your API key above to continue")
+    elif not gemini_key.startswith('AIzaSy'):f not gemini_key:
+        st.info("🔑 Please enter your API key above to continue")
+    elif not gemini_key.startswith('AIzaSy'):ed API keys for Gmail and Gemini integration
 All keys are stored in session state only and destroyed on exit
 """
 
@@ -14,48 +18,56 @@ def show_api_key_setup():
     Returns True if keys are configured and ready
     """
     st.markdown("""
-    ## 🔑 API Key Setup - Bring Your Own Keys
+    ## 🔑 Step 1: Enter Your Gemini API Key
     
-    To use real Gmail integration and AI analysis, you need to provide your own API keys. 
-    This ensures **maximum privacy** and **zero cost to us** while giving you full control.
+    **Required for AI email analysis.** Get your free API key in 2 minutes!
     
-    ### 🛡️ Privacy Promise:
-    - ✅ **Session-Only Storage**: Keys exist only in your browser session
-    - ✅ **Never Saved**: Keys are destroyed when you close the tab
-    - ✅ **Not Transmitted**: Keys never leave your browser for logging/analytics
-    - ✅ **Your Control**: You manage your own API usage and costs
+    ### 🛡️ Your Privacy is Protected:
+    - ✅ **Session-Only**: Key stored only in your browser, never on our servers
+    - ✅ **Auto-Destroyed**: Deleted when you close the tab
+    - ✅ **Your Control**: You manage costs and usage directly with Google
     """)
     
-    # Gemini API Key Section
-    st.markdown("### 🤖 Gemini AI API Key (Required for AI Analysis)")
+    # Prominent API key input
+    st.markdown("### 🔑 Enter Your API Key Here:")
     
-    with st.expander("📚 How to Get a Free Gemini API Key", expanded=False):
-        st.markdown("""
-        **Step-by-step guide:**
-        
-        1. **Visit Google AI Studio**: Go to [aistudio.google.com](https://aistudio.google.com)
-        2. **Sign in**: Use your Google account
-        3. **Get API Key**: Click "Get API Key" → "Create API Key"
-        4. **Copy the key**: It looks like `AIzaSyA...` (keep it secret!)
-        5. **Paste below**: Enter it in the field below
-        
-        **💰 Cost**: Generous free tier (15 requests per minute)
-        **🔒 Security**: Only you have access to your key
-        """)
-    
-    # Gemini API key input
+    # API key input with better UX
     gemini_key = st.text_input(
-        "🔑 Enter your Gemini API Key",
+        "Paste your Gemini API Key (starts with 'AIzaSy')",
         type="password",
         placeholder="AIzaSyA...",
-        help="Get free key from aistudio.google.com",
+        help="Get your free key from aistudio.google.com",
         key="gemini_api_key_input"
     )
     
+    # Help section
+    with st.expander("❓ How to Get Your Free API Key (2 minutes)", expanded=False):
+        st.markdown("""
+        **Quick setup:**
+        
+        1. 🌐 **Visit**: [aistudio.google.com](https://aistudio.google.com)
+        2. 🔐 **Sign in** with your Google account
+        3. 🔑 **Click**: "Get API Key" → "Create API Key"
+        4. 📋 **Copy** the key (starts with `AIzaSy...`)
+        5. 📥 **Paste** it in the field above
+        
+        **💰 Free tier**: 15 requests/minute (plenty for email analysis)
+        **🔒 Secure**: Key stays in your browser only
+        """)
+    
+    if not gemini_key:
+        st.info("� Please enter your API key above to continue")
+    elif not gemini_key.startswith('AIzaSy'):
+        st.warning("⚠️ API key should start with 'AIzaSy'. Please check your key.")
+    
     # Store in session state if provided
-    if gemini_key:
+    if gemini_key and gemini_key.startswith('AIzaSy'):
         st.session_state.user_gemini_key = gemini_key
-        st.success("✅ Gemini API key configured!")
+        st.success("🎉 **API Key Configured Successfully!** You can now connect Gmail.")
+    elif gemini_key and not gemini_key.startswith('AIzaSy'):
+        # Invalid key format - don't store it
+        if 'user_gemini_key' in st.session_state:
+            del st.session_state.user_gemini_key
     else:
         if 'user_gemini_key' in st.session_state:
             del st.session_state.user_gemini_key
@@ -94,29 +106,20 @@ def show_api_key_setup():
             st.error(f"❌ Invalid OAuth file: {e}")
     
     # Configuration status
-    st.markdown("---")
-    st.markdown("### ⚙️ Configuration Status")
-    
     has_gemini = 'user_gemini_key' in st.session_state
     has_oauth = 'user_oauth_creds' in st.session_state
     
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        if has_gemini:
-            st.success("🤖 **Gemini AI**: Configured")
-            st.info("AI email analysis available")
-        else:
-            st.warning("🤖 **Gemini AI**: Not configured")
-            st.info("Demo mode only without AI analysis")
-    
-    with col2:
-        if has_oauth:
-            st.success("📧 **Custom OAuth**: Configured")
-            st.info("Using your OAuth app")
-        else:
-            st.info("📧 **Default OAuth**: Will be used")
-            st.info("Shared OAuth for basic access")
+    if has_gemini:
+        st.markdown("---")
+        st.markdown("### ✅ Ready to Connect Gmail!")
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            st.success("🤖 **Gemini AI**: Ready")
+            st.caption("AI email analysis enabled")
+        with col2:
+            st.info("📧 **Gmail OAuth**: Default")
+            st.caption("Secure Google authentication")
     
     # Return configuration status
     return has_gemini

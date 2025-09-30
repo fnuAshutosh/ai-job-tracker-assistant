@@ -136,7 +136,7 @@ def create_demo_data():
 
 def initialize_demo_database():
     """Initialize database with demo data"""
-    print("🎭 Initializing demo database...")
+    print("[INIT] Initializing demo database...")
     print("=" * 40)
     
     # Import database utilities
@@ -144,12 +144,12 @@ def initialize_demo_database():
     from kanban_database import upgrade_database_for_kanban
     
     # Initialize the database schema
-    print("📋 Creating database schema...")
+    print("[SCHEMA] Creating database schema...")
     init_db()
     upgrade_database_for_kanban()  # Add Kanban-specific columns
     
     # Generate demo data
-    print("🎲 Generating demo applications...")
+    print("[DATA] Generating demo applications...")
     demo_apps = create_demo_data()
     
     # Insert demo data
@@ -185,8 +185,8 @@ def initialize_demo_database():
     conn.commit()
     conn.close()
     
-    print(f"✅ Created {len(demo_apps)} demo applications")
-    print("✅ Demo database initialization complete!")
+    print(f"[SUCCESS] Created {len(demo_apps)} demo applications")
+    print("[SUCCESS] Demo database initialization complete!")
     print("\n🎯 This demo data includes:")
     print("   • Realistic company names (all fictional)")
     print("   • Various job roles and application statuses")
@@ -199,7 +199,7 @@ def initialize_demo_database():
 def check_and_initialize_database():
     """Check if database exists, create with demo data if not"""
     if not os.path.exists('jobs.db'):
-        print("🚀 No database found. Initializing with demo data...")
+        print("[INIT] No database found. Initializing with demo data...")
         initialize_demo_database()
         return True
     else:
@@ -212,21 +212,21 @@ def check_and_initialize_database():
             conn.close()
             
             if count == 0:
-                print("📭 Database exists but is empty. Adding demo data...")
+                print("[EMPTY] Database exists but is empty. Adding demo data...")
                 initialize_demo_database()
                 return True
             else:
-                print(f"✅ Database exists with {count} applications")
+                print(f"[OK] Database exists with {count} applications")
                 return False
         except sqlite3.OperationalError:
             # Table doesn't exist, reinitialize
             conn.close()
-            print("🔧 Database schema missing. Reinitializing...")
+            print("[REPAIR] Database schema missing. Reinitializing...")
             initialize_demo_database()
             return True
 
 if __name__ == "__main__":
-    print("🎭 Job Tracker - Demo Database Initialization")
+    print("[DEMO] Job Tracker - Demo Database Initialization")
     print("=" * 60)
     print("This script creates a sample database with demo data.")
     print("Perfect for testing and demonstrating the application!")

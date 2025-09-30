@@ -1,7 +1,33 @@
 """
 Landing page for the Job Tracker Assistant
-Provides initial user experience with privacy disclaimers and consent flow
-"""
+Provides initial user experience with privacy disclaimers and consent flo      # Import Gma    with col1:
+        if st.button("🔗 **Connect Gmail Account**", type="primary", use_container_width=True):
+            # Use the fixed OAuth solution that handles redirect URI properly
+            try:
+                from localhost_oauth_solution import show_localhost_oauth_solution
+                return show_localhost_oauth_solution()
+            except ImportError:
+                # Fallback to original OAuth if new module isn't available
+                st.error("❌ OAuth module not found. Please check your installation.")
+                return FalseOAuth functionality
+    from session_gmail import show_gmail_oauth_flow
+    
+    # Show Gmail OAuth flow
+    gmail_connected = show_gmail_oauth_flow()
+    
+    col1, col2 = st.columns([2, 1])
+    
+    with col2:
+        if st.button("⬅️ Back", use_container_width=True):
+            st.session_state.show_landing = True
+            st.rerun()
+    
+    # Return True if Gmail is connected and user wants to proceed
+    return gmail_connectedol1:
+        if st.button("🔗 **Connect Gmail Account**", type="primary", use_container_width=True):
+            return Trueith col1:
+        if st.button("🔗 **Connect Gmail Account**", type="primary", use_container_width=True):
+            return True"""
 
 import streamlit as st
 from privacy_components import (
@@ -87,60 +113,67 @@ def show_gmail_onboarding():
     has_gemini_key = show_api_key_setup()
     
     if not has_gemini_key:
-        st.warning("""
-        ⚠️ **Gemini API key required** to proceed with Gmail integration. 
-        The AI analysis needs your personal API key for privacy and cost control.
+        st.markdown("---")
+        st.info("""
+        👆 **Please enter your Gemini API key above** to continue with Gmail integration.
+        
+        Your API key enables AI-powered email analysis while keeping your data completely private.
         """)
         
-        if st.button("⬅️ Try Demo Mode Instead"):
-            st.session_state.user_choice = "demo"
-            st.session_state.demo_mode = True
-            st.rerun()
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("⬅️ Try Demo Mode Instead", use_container_width=True):
+                st.session_state.user_choice = "demo"
+                st.session_state.demo_mode = True
+                st.rerun()
+        with col2:
+            if st.button("🔄 Refresh Page", use_container_width=True):
+                st.rerun()
         
         return False
     
     # If API key is configured, proceed with Gmail setup
-    st.success("🔑 **API Key Configured!** You can now connect Gmail.")
+    st.markdown("---")
+    st.success("🎉 **Step 1 Complete!** Your API key is configured.")
+    st.markdown("## 🚀 Step 2: Connect Gmail")
     
-    st.markdown("""
-    ### What Happens Next:
-    1. **OAuth Login**: Secure Google authentication popup
-    2. **Permission Grant**: You'll grant read-only access to your Gmail
-    3. **Email Analysis**: We'll scan for job-related emails using YOUR Gemini API
-    4. **Results Display**: See your organized job applications and interviews
-    5. **Automatic Cleanup**: All data destroyed when you close the tab
-    """)
-    
-    # Security reassurance
-    st.success("""
-    🔒 **Security Promise**: We use Google's official OAuth 2.0 system. 
-    Your Gmail password is never shared with us. You can revoke access anytime 
-    from your Google Account settings.
-    """)
-    
-    # API Cost transparency
     st.info("""
-    💰 **Cost Transparency**: Your Gemini API calls are billed to your Google account. 
-    Typical cost: ~$0.001 per email analyzed (very affordable with generous free tier).
+    **Next:** Click the button below to securely connect your Gmail account.
+    
+    • Google's official OAuth system (your password stays safe)
+    • Read-only access to find job-related emails
+    • All data deleted when you close this tab
     """)
     
-    # Warning about data destruction
-    st.warning("""
-    ⚠️ **Important**: Your data will be permanently deleted when you:
-    - Close this browser tab
-    - Navigate to a different website  
-    - Your session times out
-    - You manually disconnect Gmail
+    col1, col2 = st.columns([2, 1])
     
-    This cannot be undone and is by design for your privacy.
-    """)
+    with col1:
+        if st.button("� **Connect Gmail Account**", type="primary", use_container_width=True):
+            return True
     
-    if st.button("🔗 **I Understand - Connect Gmail**", type="primary", use_container_width=True):
-        return True
+    with col2:
+        if st.button("⬅️ Back", use_container_width=True):
+            st.session_state.show_landing = True
+            st.rerun()
     
-    if st.button("⬅️ Back to Options"):
-        st.session_state.show_landing = True
-        st.rerun()
+    # Additional info in expander
+    with st.expander("🔒 Privacy & Security Details"):
+        st.markdown("""
+        **What happens when you connect:**
+        1. **OAuth popup** opens (Google's secure login)
+        2. **Grant permission** for read-only Gmail access
+        3. **Email scan** finds job application emails
+        4. **AI analysis** using your Gemini API key
+        5. **Results display** in organized dashboard
+        
+        **Security promises:**
+        - ✅ Official Google OAuth (your password never shared)
+        - ✅ Read-only access (we can't send emails)
+        - ✅ Session-only data (deleted when tab closes)
+        - ✅ Your API costs (~$0.001 per email)
+        
+        **You can revoke access anytime** from your Google Account settings.
+        """)
     
     return False
 

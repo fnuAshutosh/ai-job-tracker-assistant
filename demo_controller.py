@@ -45,6 +45,10 @@ class DemoController:
     
     def render_demo_controls(self):
         """Render demo control panel in sidebar"""
+        # Don't render during landing page flow
+        if st.session_state.get('show_landing', True):
+            return
+            
         with st.sidebar:
             st.markdown("---")
             st.markdown("### 🎭 Demo Experience")
@@ -175,6 +179,10 @@ class DemoController:
     
     def render_walkthrough(self):
         """Render the guided walkthrough experience"""
+        # Don't run walkthrough during landing page flow
+        if st.session_state.get('show_landing', True):
+            return False
+            
         if st.session_state.get('demo_experience', 'welcome') != "guided":
             return False
             
@@ -480,6 +488,10 @@ class DemoController:
     
     def render_demo_banner(self):
         """Render demo mode banner"""
+        # Don't render during landing page flow
+        if st.session_state.get('show_landing', True):
+            return
+            
         if st.session_state.get('demo_mode', False):
             demo_type = st.session_state.get('demo_experience', 'full')
             

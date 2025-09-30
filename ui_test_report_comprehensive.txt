@@ -1,0 +1,101 @@
+
+🔍 JOB TRACKER ASSISTANT - COMPREHENSIVE UI TEST REPORT
+======================================================================
+🕒 Test Execution: 2025-09-29 11:21:43
+🎯 Application: http://localhost:8501
+🏥 Health Score: 82.4%
+
+📊 TEST SUMMARY:
+──────────────────────────────
+✅ Passed Tests:  14
+⚠️  Warnings:       1
+❌ Failed Tests:   2
+📋 Total Tests:   17
+
+🔍 DETAILED TEST RESULTS:
+──────────────────────────────────────────────────
+
+📂 IMPORT TESTS:
+   ✅ Import landing_page: Module landing_page imports successfully
+   ✅ Import user_api_keys: Module user_api_keys imports successfully
+   ✅ Import privacy_components: Module privacy_components imports successfully
+   ✅ Import demo_controller: Module demo_controller imports successfully
+   ✅ Import gmail_utils: Module gmail_utils imports successfully
+   ✅ Import ai_email_classifier: Module ai_email_classifier imports successfully
+
+📂 LANDING TESTS:
+   ✅ Landing Page Functions: Landing page functions are available
+
+📂 API TESTS:
+   ✅ API Key Functions: API key management functions are available
+
+📂 PRIVACY TESTS:
+   ✅ Privacy Components: Privacy components are available
+
+📂 DEMO TESTS:
+   ❌ Demo Controller: Demo controller test failed: 2025-09-29 11:21:37.769 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-09-29 11:21:37.769 WARNING streamlit.runtime.state.session_state_proxy: Session state does not function when running a script without `streamlit run`
+2025-09-29 11:21:37.769 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-09-29 11:21:37.769 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-09-29 11:21:37.769 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-09-29 11:21:37.769 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-09-29 11:21:37.769 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-09-29 11:21:37.769 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-09-29 11:21:37.769 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-09-29 11:21:37.769 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-09-29 11:21:37.769 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-09-29 11:21:37.769 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-09-29 11:21:37.769 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-09-29 11:21:37.769 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+AttributeError: 'DemoController' object has no attribute 'demo_applications'
+
+
+📂 DATABASE TESTS:
+   ✅ Database Operations: Database operations work correctly
+
+📂 APP TESTS:
+   ✅ App Structure - Landing Page Import: Found from landing_page import
+   ✅ App Structure - API Key Import: Found from user_api_keys import
+   ✅ App Structure - Privacy Import: Found from privacy_components import
+   ✅ App Structure - Landing Page Call: Found show_landing_page
+   ⚠️ App Structure - API Key Setup: Missing show_api_key_setup
+   ❌ App Accessibility: Cannot connect to app: HTTPConnectionPool(host='localhost', port=8501): Max retries exceeded with url: / (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002936F0A01D0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+
+──────────────────────────────────────────────────
+🎯 CRITICAL ANALYSIS:
+
+❌ CRITICAL ISSUES REQUIRING IMMEDIATE ATTENTION:
+   🚨 Demo Controller: Demo controller test failed: 2025-09-29 11:21:37.769 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-09-29 11:21:37.769 WARNING streamlit.runtime.state.session_state_proxy: Session state does not function when running a script without `streamlit run`
+2025-09-29 11:21:37.769 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-09-29 11:21:37.769 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-09-29 11:21:37.769 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-09-29 11:21:37.769 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-09-29 11:21:37.769 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-09-29 11:21:37.769 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-09-29 11:21:37.769 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-09-29 11:21:37.769 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-09-29 11:21:37.769 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-09-29 11:21:37.769 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-09-29 11:21:37.769 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-09-29 11:21:37.769 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+AttributeError: 'DemoController' object has no attribute 'demo_applications'
+
+   🚨 App Accessibility: Cannot connect to app: HTTPConnectionPool(host='localhost', port=8501): Max retries exceeded with url: / (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002936F0A01D0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+
+⚠️  WARNINGS TO INVESTIGATE:
+   🔍 App Structure - API Key Setup: Missing show_api_key_setup
+
+──────────────────────────────────────────────────
+💡 RECOMMENDATIONS:
+
+👍 GOOD: Application is mostly functional with minor issues.
+
+🔧 NEXT STEPS:
+   1. Address critical failures first
+   2. Review warnings for potential issues
+   3. Re-run tests after fixes

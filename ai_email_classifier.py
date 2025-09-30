@@ -273,7 +273,7 @@ def get_email_classifier() -> GeminiEmailClassifier:
         api_key = os.getenv('GEMINI_API_KEY')
         
         if not api_key:
-            print("🔍 No Gemini API key found in environment")
+            print("[INFO] No Gemini API key found in environment")
             setup_response = input("Would you like to set up Gemini API key now? (y/n): ").lower()
             if setup_response == 'y':
                 api_key = setup_gemini_api_key()
